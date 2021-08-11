@@ -1,0 +1,135 @@
+
+
+
+
+Seif El-Din El-Moghazy
+Technical Assessment Report
+
+
+
+
+
+
+
+
+
+
+
+Summary
+
+-In my technical assessment, I did the following: 
+Trained the provided model and saved it using pickle in order to use in my API 
+Used Flask to develop an API that takes data from users, communicate it to the machine learning model (loaded by pickle), get the top recommended products, and send it back to users
+Used Flask Restx to aid in generating a swagger documentation for my api
+
+Documentation includes explanation of the POST request developed, with explanations of the request parameters, the response parameters, and the different responses (with http codes) the user might receive
+
+						
+Figure A  Request fields documentation
+
+
+Figure B Response Documentation
+
+The code consists of 3 main parts: 
+The Flask API
+Data processing class, which is responsible of processing the data received into the form accepted by the model
+Data prediction class, which is responsible of loading the model with the extension passed at the instant creation, in addition to predicting the data received from the processing class
+
+After building the API, I wrote the dockerfile responsible of generating the docker image for a container to run it
+
+
+
+Request-Response Pairs
+
+To run requests, use either the swagger documentation or Postman with the following url and request body
+ 
+Request URL: http://localhost:5000/Predictor/Predict
+
+Request Body: 
+{
+  "sexo": "H",
+  "age": 22,
+  "segmento": "03 - UNIVERSITARIO",
+  "antiguedad": 34,
+  "tiprel_1mes": "I",
+  "renta": 106885.8,
+  "pais_residencia": "ES",
+  "ind_actividad_cliente": “0”,
+  "nomprav": "BALEARS, ILLES"
+}
+
+
+    	 Response:
+{
+  "Predictions": "ind_cco_fin_ult1 ind_recibo_ult1 ind_nom_pens_ult1 ind_cno_fin_ult1 ind_nomina_ult1 ind_ecue_fin_ult1 ind_reca_fin_ult1"
+} 
+
+
+Reuqest URL: http://localhost:5000/Predictor/Predict
+
+                	Request Body: 
+{
+  "sexo": "V",
+  "age": 56,
+  "segmento": "01 - TOP",
+  "antiguedad": 256,
+  "tiprel_1mes": "A",
+  "renta": 326124.9,
+  "pais_residencia": "ES",
+  "ind_actividad_cliente": "0",
+  "nomprav": "MADRID"
+}
+
+		
+		Response Body: 
+{ "Predictions": "ind_cco_fin_ult1 ind_tjcr_fin_ult1 ind_recibo_ult1 ind_ecue_fin_ult1 ind_nom_pens_ult1 ind_nomina_ult1 ind_dela_fin_ult1" }
+
+		
+Request URL: http://localhost:5000/Predictor/Predict
+
+Request Body: 
+{
+  "sexo": "H",
+  "age": 36,
+  "segmento": "02 - PARTICULARES",
+  "antiguedad": 34,
+  "tiprel_1mes": "I",
+  "renta": -99,
+  "pais_residencia": "ES",
+  "ind_actividad_cliente": "0",
+  "nomprav": "ALICANTE"
+}
+
+
+Response Body:
+{
+  "Predictions": "ind_cco_fin_ult1 ind_recibo_ult1 ind_nom_pens_ult1 ind_nomina_ult1 ind_cno_fin_ult1 ind_tjcr_fin_ult1 ind_ecue_fin_ult1"
+}
+
+
+Note that -99 in field “renta” is equivalent to NA or ‘ ‘ since that the field is set to a Float in Request-fields model
+
+Bonus Tasks
+
+Please find attached in the github repo the dockerfile that will be used to build a docker image
+
+
+For API expansion to serve multiple ML models, dataPrediction class which receives a model’s name (or extension) which can grab the specified model from either our server or a cloud storage such as that of AWS. 
+In addition, in order to facilitate the model selection of the user, we would ask the user to enter his/her bank name , which will be mapped to our models , with other data.
+
+
+
+
+
+
+
+
+Diagram: 
+
+
+
+
+
+
+         
+     
